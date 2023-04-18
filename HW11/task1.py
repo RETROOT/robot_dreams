@@ -9,8 +9,8 @@ def add():
         if name in phonebook:
             print("Error: entry with name", name, "already exists")
         else:
-            phone = input("Enter a phone number: ")
             lastname = input("Enter Lastname: ")
+            phone = input("Enter a phone number: ")
             phonebook[name] = {'Phone number': phone, 'Lastname': lastname}
         print("The entry is added to the phone book")
     except Exception as e:
@@ -18,23 +18,16 @@ def add():
 
 def delete(name):
     try:
-        if name in phonebook:
-            del phonebook[name]
-            print("Entry by name", name, "deleted from phone book")
-        else:
-            print("Error: record with name", name, "does not exist")
-    except Exception as e:
-        print("Error:", str(e))
+        del phonebook[name]
+        print("Entry by name", name, "deleted from phone book")
+    except KeyError as e:
+        print(f"Error: record with name {name} does not exist. Exc: {e}")
 def show(name):
     try:
-        if name in phonebook:
-            print("Name:", name)
-            print("Phone:", phonebook[name]['Phone number'])
-            print("Lastname:", phonebook[name]['Lastname'])
-        else:
-            print("Error: record with name", name, "does not exist")
-    except Exception as e:
-        print("Error:", str(e))
+        record = phonebook[name]
+        print(f"Name: {name}, Last name: {record['Lastname']}, Phone number: {record['Phone number']}")
+    except KeyError as e:
+        print(f"Error: record with name {name} does not exist. Exc: {e}")
 def phonebook_list():
     for name in phonebook:
         print(name)

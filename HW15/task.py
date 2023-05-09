@@ -1,6 +1,7 @@
+import threading
 import requests
-import multiprocessing
 import time
+import multiprocessing
 
 cities = [
     {"name": "Kyiv", "latitude": 50.45, "longitude": 30.51},
@@ -23,6 +24,13 @@ def get_temperature(city):
     print(f"{city['name']}: {temperature}°C")
     return temperature
 
+def get_temperatures_thread(cities):
+    threads = [threading.Thread(target=get_temperature, args=(city,)) for city in cities]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
 if __name__ == '__main__':
     start_time = time.time()
     with multiprocessing.Pool(processes=5) as pool:
@@ -39,7 +47,6 @@ if __name__ == '__main__':
     print(f"Multiprocessing took {time.time() - start_time:.2f} seconds")
 
     start_time = time.time()
-    for city in cities:
-        get_temperature(city)
+    get_temperatures_thread(cities)
 
-    print(f"Program ended in {time.time() - start_time:.2f} seconds")
+    print(f"Threading took {time.time() - start_time:.2f} seconds")
